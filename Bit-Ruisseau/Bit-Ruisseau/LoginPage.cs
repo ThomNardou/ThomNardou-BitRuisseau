@@ -7,9 +7,9 @@ using MQTTnet.Protocol;
 
 namespace Bit_Ruisseau
 {
-    public partial class Form1 : Form
+    public partial class LoginPage : Form
     {
-        public Form1()
+        public LoginPage()
         {
             InitializeComponent();
         }
@@ -32,6 +32,7 @@ namespace Bit_Ruisseau
                 .WithCleanSession()
                 .Build();
 
+
             var res = await mqttClient.ConnectAsync(options);
 
             if (res.ResultCode == MqttClientConnectResultCode.Success)
@@ -39,6 +40,23 @@ namespace Bit_Ruisseau
                 Debug.WriteLine("Connected to MQTT broker successfully.");
 
                 await mqttClient.SubscribeAsync("thomasTest");
+
+                mqttClient.ApplicationMessageReceivedAsync += message =>
+                {
+
+                    var payload = Encoding.UTF8.GetString(message.ApplicationMessage.Payload);
+
+                    Debug.WriteLine($"{payload}");
+                    try
+                    {
+                        return Task.CompletedTask;
+                    }
+                    catch (Exception e)
+                    {
+                        return Task.FromException(e);
+                    }
+                };
+
 
                 for (int i = 0; i < 10; i++)
                 {
