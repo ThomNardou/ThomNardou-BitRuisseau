@@ -3,6 +3,7 @@ using System.Net;
 using MQTTnet;
 using System.Text;
 using System.Diagnostics;
+using MQTTnet.Protocol;
 
 namespace Bit_Ruisseau
 {
@@ -36,6 +37,21 @@ namespace Bit_Ruisseau
             if (res.ResultCode == MqttClientConnectResultCode.Success)
             {
                 Debug.WriteLine("Connected to MQTT broker successfully.");
+
+                await mqttClient.SubscribeAsync("thomasTest");
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var message = new MqttApplicationMessageBuilder()
+                        .WithTopic("thomasTest")
+                        .WithPayload($"Hello, MQTT! Message number {i}")
+                        .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                        .WithRetainFlag()
+                        .Build();
+
+                    await mqttClient.PublishAsync(message);
+                    await Task.Delay(1000); // Wait for 1 second
+                }
             }
         }
     }
