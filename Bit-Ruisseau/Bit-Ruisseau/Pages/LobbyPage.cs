@@ -23,19 +23,7 @@ namespace Bit_Ruisseau.Pages
 
         private async void sendButton_Click(object sender, EventArgs e)
         {
-            await client.SubscribeAsync(new MqttTopicFilterBuilder()
-                .WithTopic("thomasTest")
-                .WithNoLocal(true)
-                .Build()
-                );
-
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic("thomasTest")
-                .WithPayload($"ngsreuigbeaugbazuioegbhejsrjk")
-                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
-                .WithRetainFlag()
-                .Build();
-            await client.PublishAsync(message);
+            Utils.Utils.SendMessage(this.client, "HELLO, qui a des musiques ?", "testTiago");
         }
     }
 }

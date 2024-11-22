@@ -1,4 +1,6 @@
-﻿using MQTTnet;
+﻿using Bit_Ruisseau.Classes;
+using Bit_Ruisseau.Utils;
+using MQTTnet;
 using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,7 +18,6 @@ namespace Bit_Ruisseau.Pages
 {
     public partial class LoginPages : Form
     {
-        string guid = Guid.NewGuid().ToString();
         public LoginPages()
         {
             InitializeComponent();
@@ -33,7 +35,7 @@ namespace Bit_Ruisseau.Pages
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(this.hostBox.Text, 1883)
                 .WithCredentials(this.userBox.Text, this.passwordBox.Text)
-                .WithClientId(guid)
+                .WithClientId(Utils.Utils.GetGuid())
                 .WithCleanSession()
                 .Build();
 
@@ -44,19 +46,20 @@ namespace Bit_Ruisseau.Pages
             {
                 Debug.WriteLine("Connected to MQTT broker successfully.");
 
-                sendMSG(mqttClient, "HELLO, qui a des musiques ?");
+                Utils.Utils.SendMessage(mqttClient, "HELLO, qui a des musiques ?", "testTiago");
 
                 mqttClient.ApplicationMessageReceivedAsync += message =>
                 {
-                    Debug.WriteLine(message.ClientId + " VS " + guid);
-                    if (message.ClientId != guid)
+
+                    var payload = Encoding.UTF8.GetString(message.ApplicationMessage.Payload);
+                    Enveloppe receivedMessage = JsonSerializer.Deserialize<Enveloppe>(payload);
+                    
+                    if (receivedMessage.Guid != Utils.Utils.GetGuid())
                     {
 
-                        var payload = Encoding.UTF8.GetString(message.ApplicationMessage.Payload);
-
-                        if (payload.ToString() == "HELLO, qui a des musiques ?")
+                        if (receivedMessage.Content == "HELLO, qui a des musiques ?")
                         {
-                            sendMSG(mqttClient, "J'en ai pas");
+                            Utils.Utils.SendMessage(mqttClient, "J'en ai pas", "testTiago");
                         }
 
                         Debug.WriteLine($"EVENT : {payload}");
@@ -83,23 +86,6 @@ namespace Bit_Ruisseau.Pages
                 this.Hide();
                 lobby.Show();
             }
-        }
-
-        public async void sendMSG(IMqttClient mqttClient, string _msg)
-        {
-            await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
-                                .WithTopic("test")
-                                .WithNoLocal(true)
-                                .Build()
-                                );
-
-            var msg = new MqttApplicationMessageBuilder()
-                .WithTopic("test")
-                .WithPayload(_msg)
-                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
-                .WithRetainFlag()
-                .Build();
-            await mqttClient.PublishAsync(msg);
         }
     }
 }
