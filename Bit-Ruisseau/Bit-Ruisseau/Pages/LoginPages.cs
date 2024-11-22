@@ -1,22 +1,25 @@
-using System.Net.Sockets;
-using System.Net;
-using MQTTnet;
-using System.Text;
+﻿using MQTTnet;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
-using MQTTnet.Protocol;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace Bit_Ruisseau
+namespace Bit_Ruisseau.Pages
 {
-    public partial class LoginPage : Form
+    public partial class LoginPages : Form
     {
-        public LoginPage()
+        public LoginPages()
         {
             InitializeComponent();
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
+            this.hostBox.Text = "mqtt.blue.section-inf.ch";
+            this.userBox.Text = "ict";
+            this.passwordBox.Text = "321";
         }
 
         private async void connectButton_Click(object sender, EventArgs e)
@@ -39,7 +42,6 @@ namespace Bit_Ruisseau
             {
                 Debug.WriteLine("Connected to MQTT broker successfully.");
 
-                await mqttClient.SubscribeAsync("thomasTest");
 
                 mqttClient.ApplicationMessageReceivedAsync += message =>
                 {
@@ -57,19 +59,14 @@ namespace Bit_Ruisseau
                     }
                 };
 
+           
 
-                for (int i = 0; i < 10; i++)
-                {
-                    var message = new MqttApplicationMessageBuilder()
-                        .WithTopic("thomasTest")
-                        .WithPayload($"Hello, MQTT! Message number {i}")
-                        .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
-                        .WithRetainFlag()
-                        .Build();
-
-                    await mqttClient.PublishAsync(message);
-                    await Task.Delay(1000); // Wait for 1 second
-                }
+                LobbyPage lobby = new LobbyPage(mqttClient);
+                lobby.Location = this.Location;
+                lobby.StartPosition = FormStartPosition.Manual;
+                lobby.FormClosing += delegate {this.Close(); };
+                this.Hide();
+                lobby.Show();
             }
         }
     }
