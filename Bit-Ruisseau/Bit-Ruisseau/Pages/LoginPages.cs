@@ -1,4 +1,5 @@
 ﻿using MQTTnet;
+using MQTTnet.Protocol;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,10 +15,11 @@ namespace Bit_Ruisseau.Pages
 {
     public partial class LoginPages : Form
     {
+        string guid = Guid.NewGuid().ToString();
         public LoginPages()
         {
             InitializeComponent();
-            this.hostBox.Text = "mqtt.blue.section-inf.ch";
+            this.hostBox.Text = "inf-n510-p301";
             this.userBox.Text = "ict";
             this.passwordBox.Text = "321";
         }
@@ -31,7 +33,7 @@ namespace Bit_Ruisseau.Pages
             var options = new MqttClientOptionsBuilder()
                 .WithTcpServer(this.hostBox.Text, 1883)
                 .WithCredentials(this.userBox.Text, this.passwordBox.Text)
-                .WithClientId(this.userBox.Text + Guid.NewGuid().ToString())
+                .WithClientId(guid)
                 .WithCleanSession()
                 .Build();
 
@@ -42,32 +44,62 @@ namespace Bit_Ruisseau.Pages
             {
                 Debug.WriteLine("Connected to MQTT broker successfully.");
 
+                sendMSG(mqttClient, "HELLO, qui a des musiques ?");
 
                 mqttClient.ApplicationMessageReceivedAsync += message =>
                 {
-
-                    var payload = Encoding.UTF8.GetString(message.ApplicationMessage.Payload);
-
-                    Debug.WriteLine($"{payload}");
-                    try
+                    Debug.WriteLine(message.ClientId + " VS " + guid);
+                    if (message.ClientId != guid)
                     {
-                        return Task.CompletedTask;
+
+                        var payload = Encoding.UTF8.GetString(message.ApplicationMessage.Payload);
+
+                        if (payload.ToString() == "HELLO, qui a des musiques ?")
+                        {
+                            sendMSG(mqttClient, "J'en ai pas");
+                        }
+
+                        Debug.WriteLine($"EVENT : {payload}");
+                        try
+                        {
+                            return Task.CompletedTask;
+                        }
+                        catch (Exception e)
+                        {
+                            return Task.FromException(e);
+                        }
                     }
-                    catch (Exception e)
-                    {
-                        return Task.FromException(e);
-                    }
+
+                    return Task.CompletedTask;
+
                 };
 
-           
+
 
                 LobbyPage lobby = new LobbyPage(mqttClient);
                 lobby.Location = this.Location;
                 lobby.StartPosition = FormStartPosition.Manual;
-                lobby.FormClosing += delegate {this.Close(); };
+                lobby.FormClosing += delegate { this.Close(); };
                 this.Hide();
                 lobby.Show();
             }
+        }
+
+        public async void sendMSG(IMqttClient mqttClient, string _msg)
+        {
+            await mqttClient.SubscribeAsync(new MqttTopicFilterBuilder()
+                                .WithTopic("test")
+                                .WithNoLocal(true)
+                                .Build()
+                                );
+
+            var msg = new MqttApplicationMessageBuilder()
+                .WithTopic("test")
+                .WithPayload(_msg)
+                .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
+                .WithRetainFlag()
+                .Build();
+            await mqttClient.PublishAsync(msg);
         }
     }
 }

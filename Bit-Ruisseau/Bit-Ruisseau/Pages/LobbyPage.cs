@@ -31,7 +31,7 @@ namespace Bit_Ruisseau.Pages
 
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic("thomasTest")
-                .WithPayload($"Hello THomas")
+                .WithPayload($"ngsreuigbeaugbazuioegbhejsrjk")
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .WithRetainFlag()
                 .Build();
