@@ -1,4 +1,5 @@
 ﻿using Bit_Ruisseau.Classes;
+using Bit_Ruisseau.Classes.Enveloppes;
 using Bit_Ruisseau.Utils;
 using MQTTnet;
 using MQTTnet.Protocol;
@@ -52,7 +53,7 @@ namespace Bit_Ruisseau.Pages
                 {
 
                     var payload = Encoding.UTF8.GetString(message.ApplicationMessage.Payload);
-                    Enveloppe receivedMessage = JsonSerializer.Deserialize<Enveloppe>(payload);
+                    EnveloppeDemandeCatalogue receivedMessage = JsonSerializer.Deserialize<EnveloppeDemandeCatalogue>(payload);
                     
                     if (receivedMessage.Guid != Utils.Utils.GetGuid())
                     {
