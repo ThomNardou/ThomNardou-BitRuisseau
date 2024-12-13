@@ -21,13 +21,12 @@ namespace Bit_Ruisseau.Pages
     public partial class LoginPages : Form
     {
         
-        private List<MediaData> LocalMusicList;
-        private Dictionary<string, List<MediaData>> SendersCatalogs;
+        
         public LoginPages()
         {
             InitializeComponent();
-            LocalMusicList = new List<MediaData>();
-            SendersCatalogs = new Dictionary<string, List<MediaData>>();
+            Utils.Utils.LocalMusicList = new List<MediaData>();
+            Utils.Utils.SendersCatalogs = new Dictionary<string, List<MediaData>>();
             this.hostBox.Text = "blue.section-inf.ch";
             this.userBox.Text = "ict";
             this.passwordBox.Text = "321";
@@ -35,7 +34,7 @@ namespace Bit_Ruisseau.Pages
 
         private async void connectButton_Click(object sender, EventArgs e)
         {
-            Utils.Utils.Engine.Connect(this.hostBox.Text, this.userBox.Text, this.passwordBox.Text);
+            Utils.Utils.Engine.Connect(this.hostBox.Text, this.userBox.Text, this.passwordBox.Text, this);
         }
     }
 }

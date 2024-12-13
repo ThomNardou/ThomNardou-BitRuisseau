@@ -23,6 +23,9 @@ namespace Bit_Ruisseau.Utils
 
         public static P2PEngine Engine = new P2PEngine();
         
+        public static List<MediaData> LocalMusicList;
+        public static Dictionary<string, List<MediaData>> SendersCatalogs;
+        
 
         public static string GetGuid()
         {
@@ -62,7 +65,7 @@ namespace Bit_Ruisseau.Utils
             switch (_type)
             {
                 case MessageType.ENVOIE_CATALOGUE:
-                    EnveloppeEnvoieCatalogue enveloppeCatalogue = new EnveloppeEnvoieCatalogue();
+                    SendCatalog enveloppeCatalogue = new SendCatalog();
                     enveloppeCatalogue.Type = 1;
                     enveloppeCatalogue.Guid = GetGuid();
                     enveloppeCatalogue.Content = _list;
@@ -70,12 +73,12 @@ namespace Bit_Ruisseau.Utils
                     response.EnveloppeJson = enveloppeCatalogue.ToJson();
                     break;
                 case MessageType.DEMANDE_CATALOGUE:
-                    EnveloppeDemandeCatalogue enveloppeDemandeCatalogue = new EnveloppeDemandeCatalogue();
-                    enveloppeDemandeCatalogue.Type = 2;
-                    enveloppeDemandeCatalogue.Guid = GetGuid();
-                    enveloppeDemandeCatalogue.Content = "Demande de catalogue";
+                    AskCatalog askCatalog = new AskCatalog();
+                    askCatalog.Type = 2;
+                    askCatalog.Guid = GetGuid();
+                    askCatalog.Content = "Demande de catalogue";
                     
-                    response.EnveloppeJson = enveloppeDemandeCatalogue.ToJson();
+                    response.EnveloppeJson = askCatalog.ToJson();
                     break;
             }
             

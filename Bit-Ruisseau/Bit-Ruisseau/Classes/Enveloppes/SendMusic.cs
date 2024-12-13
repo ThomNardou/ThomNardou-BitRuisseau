@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit_Ruisseau.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,20 +8,14 @@ using System.Threading.Tasks;
 
 namespace Bit_Ruisseau.Classes.Enveloppes
 {
-    public class EnveloppeEnvoieCatalogue
+    public class SendMusic : IMessage
     {
         /*
-            type 1
+            type 3
         */
         private int _type;
         private string _guid;
-        private List<MediaData> _content;
-
-        public List<MediaData>? Content
-        {
-            get => _content;
-            set => _content = value;
-        }
+        private string _content;
 
         public int Type
         {
@@ -32,6 +27,12 @@ namespace Bit_Ruisseau.Classes.Enveloppes
         {
             get => _guid;
             set => _guid = value;
+        }
+
+        public string Content
+        {
+            get => _content;
+            set => _content = value;
         }
 
         public string ToJson()

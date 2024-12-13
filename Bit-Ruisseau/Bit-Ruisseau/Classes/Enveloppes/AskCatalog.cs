@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Bit_Ruisseau.Classes.Enveloppes
 {
-    public class EnveloppeDemandeCatalogue
+    public class AskCatalog
     {
         /*
             type 2
