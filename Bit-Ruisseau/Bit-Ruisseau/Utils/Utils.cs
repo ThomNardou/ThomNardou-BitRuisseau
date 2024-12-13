@@ -40,8 +40,6 @@ namespace Bit_Ruisseau.Utils
 
         public static async void SendMessage(IMqttClient _client, GenericEnvelope _envelope, string _topic)
         {
-            
-
             await _client.SubscribeAsync(new MqttTopicFilterBuilder()
                 .WithTopic(_topic)
                 .WithNoLocal(true)
@@ -57,7 +55,7 @@ namespace Bit_Ruisseau.Utils
             await _client.PublishAsync(message);
         }
 
-        public static GenericEnvelope CreateEnveloppeCatalogSender(List<MediaData> _list, MessageType _type)
+        public static GenericEnvelope CreateGenericEnvelop(List<MediaData> _list, MessageType _type)
         {
             GenericEnvelope response = new GenericEnvelope
             {

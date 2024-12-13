@@ -10,3 +10,4 @@
 ## 13.12.2024
 - 22m J'ai fait l'évaluation intermédiaire avec M. Melly 
 - 15m J'ai modifié mon code pour qu'il prenne en compte les remarques de M. Melly
+- 10m J'ai aidé Lucas à regler un problème qu'il avait 

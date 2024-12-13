@@ -56,7 +56,7 @@ public class P2PEngine
             Debug.WriteLine("Connected to MQTT broker successfully.");
             Debug.WriteLine("GUID: " + Utils.Utils.GetGuid());
             GenericEnvelope sender =
-                Utils.Utils.CreateEnveloppeCatalogSender(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
+                Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
 
             Utils.Utils.SendMessage(mqttClient, sender, Utils.Utils.GetTopic());
 
@@ -73,7 +73,7 @@ public class P2PEngine
                     switch (envelope.MessageType)
                     {
                         case MessageType.DEMANDE_CATALOGUE:
-                            GenericEnvelope res = Utils.Utils.CreateEnveloppeCatalogSender(Utils.Utils.LocalMusicList,
+                            GenericEnvelope res = Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList,
                                 MessageType.ENVOIE_CATALOGUE);
 
                             if (mqttClient == null || !mqttClient.IsConnected)
