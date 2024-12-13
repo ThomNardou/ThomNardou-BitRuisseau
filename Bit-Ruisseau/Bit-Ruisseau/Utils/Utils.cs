@@ -25,11 +25,12 @@ namespace Bit_Ruisseau.Utils
         
         public static List<MediaData> LocalMusicList;
         public static Dictionary<string, List<MediaData>> SendersCatalogs;
+        public static List<MediaData> CatalogList = new List<MediaData>();
         
 
         public static string GetGuid()
         {
-            return guid;
+            return "Thomas-" + guid;
         }
 
         public static string GetTopic()

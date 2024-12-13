@@ -20,7 +20,7 @@ public class P2PEngine
 
         List<string> paths = Directory.GetFiles($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics").ToList();
 
-        
+
         paths.ForEach(path =>
         {
             MediaData media = new MediaData();
@@ -54,7 +54,9 @@ public class P2PEngine
         if (res.ResultCode == MqttClientConnectResultCode.Success)
         {
             Debug.WriteLine("Connected to MQTT broker successfully.");
-            GenericEnvelope sender = Utils.Utils.CreateEnveloppeCatalogSender(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
+            Debug.WriteLine("GUID: " + Utils.Utils.GetGuid());
+            GenericEnvelope sender =
+                Utils.Utils.CreateEnveloppeCatalogSender(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
 
             Utils.Utils.SendMessage(mqttClient, sender, Utils.Utils.GetTopic());
 
@@ -88,6 +90,8 @@ public class P2PEngine
                         case MessageType.ENVOIE_CATALOGUE:
                             SendCatalog enveloppe = JsonSerializer.Deserialize<SendCatalog>(envelope.EnveloppeJson);
                             Utils.Utils.SendersCatalogs.Add(envelope.SenderId, enveloppe.Content);
+
+                            enveloppe.Content.ForEach(media => { Utils.Utils.CatalogList.Add(media); });
                             break;
                     }
                 }

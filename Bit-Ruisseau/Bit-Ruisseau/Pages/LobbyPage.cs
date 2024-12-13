@@ -38,10 +38,7 @@ namespace Bit_Ruisseau.Pages
         private void changeviewCatalog_button_Click(object sender, EventArgs e)
         {
             this.fileDataGridView.DataSource = null;
-            Utils.Utils.SendersCatalogs.ToList().ForEach(senderCata =>
-            {
-                this.fileDataGridView.DataSource = senderCata.Value;
-            });
+            this.fileDataGridView.DataSource = Utils.Utils.CatalogList;
         }
     }
 }
