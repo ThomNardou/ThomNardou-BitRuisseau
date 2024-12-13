@@ -18,19 +18,30 @@ namespace Bit_Ruisseau.Pages
     {
         private IMqttClient client;
         private List<MediaData> localCatalog;
+
         public LobbyPage(IMqttClient _client, List<MediaData> _localCatalog)
         {
             InitializeComponent();
             client = _client;
             localCatalog = _localCatalog;
-            
-            this.fileDataGridView.DataSource = localCatalog;
+
+            this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
             this.fileDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        private async void sendButton_Click(object sender, EventArgs e)
+        private void yourFiles_Click(object sender, EventArgs e)
         {
-            // Utils.Utils.SendMessage(this.client, "HELLO, qui a des musiques ?", Utils.Utils.GetTopic(), MessageType.DEMANDE_CATALOGUE);
+            this.fileDataGridView.DataSource = null;
+            this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
+        }
+
+        private void changeviewCatalog_button_Click(object sender, EventArgs e)
+        {
+            this.fileDataGridView.DataSource = null;
+            Utils.Utils.SendersCatalogs.ToList().ForEach(senderCata =>
+            {
+                this.fileDataGridView.DataSource = senderCata.Value;
+            });
         }
     }
 }

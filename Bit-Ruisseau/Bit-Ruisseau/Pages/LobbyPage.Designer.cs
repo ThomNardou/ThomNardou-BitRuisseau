@@ -28,20 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            sendButton = new System.Windows.Forms.Button();
             fileDataGridView = new System.Windows.Forms.DataGridView();
+            yourFiles = new System.Windows.Forms.Button();
+            changeviewCatalog_button = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)fileDataGridView).BeginInit();
             SuspendLayout();
-            // 
-            // sendButton
-            // 
-            sendButton.Location = new System.Drawing.Point(81, 51);
-            sendButton.Name = "sendButton";
-            sendButton.Size = new System.Drawing.Size(75, 23);
-            sendButton.TabIndex = 1;
-            sendButton.Text = "button1";
-            sendButton.UseVisualStyleBackColor = true;
-            sendButton.Click += sendButton_Click;
             // 
             // fileDataGridView
             // 
@@ -50,22 +41,44 @@
             fileDataGridView.Size = new System.Drawing.Size(807, 638);
             fileDataGridView.TabIndex = 2;
             // 
+            // yourFiles
+            // 
+            yourFiles.Location = new System.Drawing.Point(56, 65);
+            yourFiles.Name = "yourFiles";
+            yourFiles.Size = new System.Drawing.Size(148, 55);
+            yourFiles.TabIndex = 3;
+            yourFiles.Text = "Vos fichiers";
+            yourFiles.UseVisualStyleBackColor = true;
+            yourFiles.Click += yourFiles_Click;
+            // 
+            // changeviewCatalog_button
+            // 
+            changeviewCatalog_button.Location = new System.Drawing.Point(56, 157);
+            changeviewCatalog_button.Name = "changeviewCatalog_button";
+            changeviewCatalog_button.Size = new System.Drawing.Size(148, 55);
+            changeviewCatalog_button.TabIndex = 4;
+            changeviewCatalog_button.Text = "Catalogue";
+            changeviewCatalog_button.UseVisualStyleBackColor = true;
+            changeviewCatalog_button.Click += changeviewCatalog_button_Click;
+            // 
             // LobbyPage
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(1066, 662);
+            Controls.Add(changeviewCatalog_button);
+            Controls.Add(yourFiles);
             Controls.Add(fileDataGridView);
-            Controls.Add(sendButton);
             Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)fileDataGridView).EndInit();
             ResumeLayout(false);
         }
 
+        private System.Windows.Forms.Button yourFiles;
+        private System.Windows.Forms.Button changeviewCatalog_button;
+
         private System.Windows.Forms.DataGridView fileDataGridView;
 
         #endregion
-
-        private System.Windows.Forms.Button sendButton;
     }
 }

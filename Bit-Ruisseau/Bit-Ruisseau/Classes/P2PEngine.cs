@@ -54,10 +54,9 @@ public class P2PEngine
         if (res.ResultCode == MqttClientConnectResultCode.Success)
         {
             Debug.WriteLine("Connected to MQTT broker successfully.");
-            GenericEnvelope demande =
-                Utils.Utils.CreateEnveloppeCatalogSender(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
+            GenericEnvelope sender = Utils.Utils.CreateEnveloppeCatalogSender(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
 
-            Utils.Utils.SendMessage(mqttClient, demande, Utils.Utils.GetTopic());
+            Utils.Utils.SendMessage(mqttClient, sender, Utils.Utils.GetTopic());
 
 
             /////////////////////////// RECEIVE MESSAGES EVENT ///////////////////////////
