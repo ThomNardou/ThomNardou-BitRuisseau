@@ -20,7 +20,8 @@ namespace Bit_Ruisseau.Utils
     public static class Utils
     {
         private static string guid = Guid.NewGuid().ToString();
-        
+
+        public static P2PEngine Engine = new P2PEngine();
         
 
         public static string GetGuid()
