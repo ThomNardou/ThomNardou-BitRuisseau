@@ -3,3 +3,10 @@
 
 ## 22.11.2024
 - 45 minutes d'absence pour une interview dans le cadre d'un projet pour les portes ouvertes 
+
+## 29.11.2026
+- 1h25 de reorganisation du code
+
+## 13.12.2024
+- 22m J'ai fait l'évaluation intermédiaire avec M. Melly 
+- 15m J'ai modifié mon code pour qu'il prenne en compte les remarques de M. Melly
