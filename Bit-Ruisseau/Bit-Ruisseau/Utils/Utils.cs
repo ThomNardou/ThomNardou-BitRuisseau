@@ -59,26 +59,32 @@ namespace Bit_Ruisseau.Utils
 
         public static GenericEnvelope CreateEnveloppeCatalogSender(List<MediaData> _list, MessageType _type)
         {
-            GenericEnvelope response = new GenericEnvelope();
-            response.MessageType = _type;
-            response.SenderId = GetGuid();
+            GenericEnvelope response = new GenericEnvelope
+            {
+                MessageType = _type,
+                SenderId = GetGuid()
+            };
 
             switch (_type)
             {
                 case MessageType.ENVOIE_CATALOGUE:
-                    SendCatalog enveloppeCatalogue = new SendCatalog();
-                    enveloppeCatalogue.Type = 1;
-                    enveloppeCatalogue.Guid = GetGuid();
-                    enveloppeCatalogue.Content = _list;
-                        
+                    SendCatalog enveloppeCatalogue = new SendCatalog
+                    {
+                        Type = 1,
+                        Guid = GetGuid(),
+                        Content = _list
+                    };
+
                     response.EnveloppeJson = enveloppeCatalogue.ToJson();
                     break;
                 case MessageType.DEMANDE_CATALOGUE:
-                    AskCatalog askCatalog = new AskCatalog();
-                    askCatalog.Type = 2;
-                    askCatalog.Guid = GetGuid();
-                    askCatalog.Content = "Demande de catalogue";
-                    
+                    AskCatalog askCatalog = new AskCatalog
+                    {
+                        Type = 2,
+                        Guid = GetGuid(),
+                        Content = "Demande de catalogue"
+                    };
+
                     response.EnveloppeJson = askCatalog.ToJson();
                     break;
             }

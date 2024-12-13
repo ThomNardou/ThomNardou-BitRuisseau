@@ -93,6 +93,9 @@ public class P2PEngine
 
                             enveloppe.Content.ForEach(media => { Utils.Utils.CatalogList.Add(media); });
                             break;
+                        
+                        case MessageType.DEMANDE_FICHIER:
+                            break;
                     }
                 }
             };
