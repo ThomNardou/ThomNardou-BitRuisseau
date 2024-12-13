@@ -20,10 +20,17 @@ namespace Bit_Ruisseau.Utils
     public static class Utils
     {
         private static string guid = Guid.NewGuid().ToString();
+        
+        
 
         public static string GetGuid()
         {
             return guid;
+        }
+
+        public static string GetTopic()
+        {
+            return "thomasTest";
         }
 
         public static async void SendMessage(IMqttClient _client, string _message, string _topic, MessageType type)

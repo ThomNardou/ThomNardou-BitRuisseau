@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="MQTTnet" Version="5.0.0.1214-RC" />
+    <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
   </ItemGroup>
 
 </Project>
