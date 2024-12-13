@@ -21,10 +21,12 @@ namespace Bit_Ruisseau.Pages
     public partial class LoginPages : Form
     {
         private List<MediaData> LocalMusicList;
+        private Dictionary<string, List<MediaData>> SendersCatalogs;
         public LoginPages()
         {
             InitializeComponent();
             LocalMusicList = new List<MediaData>();
+            SendersCatalogs = new Dictionary<string, List<MediaData>>();
             this.hostBox.Text = "blue.section-inf.ch";
             this.userBox.Text = "ict";
             this.passwordBox.Text = "321";
@@ -72,49 +74,42 @@ namespace Bit_Ruisseau.Pages
             if (res.ResultCode == MqttClientConnectResultCode.Success)
             {
                 Debug.WriteLine("Connected to MQTT broker successfully.");
+                GenericEnvelope demande = Utils.Utils.CreateEnveloppeCatalogSender(LocalMusicList, MessageType.DEMANDE_CATALOGUE);
 
-                Utils.Utils.SendMessage(mqttClient, "HELLO, qui a des musiques ?", Utils.Utils.GetTopic(), MessageType.DEMANDE_CATALOGUE);
+                Utils.Utils.SendMessage(mqttClient, demande, Utils.Utils.GetTopic());
 
                 
-                
+                /////////////////////////// RECEIVE MESSAGES EVENT ///////////////////////////
                 mqttClient.ApplicationMessageReceivedAsync += async e =>
                 {
                     string receivedMessage = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
                     
-                    GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(receivedMessage);    
+                    GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(receivedMessage);
 
-                    if (envelope.MessageType == MessageType.DEMANDE_CATALOGUE)
+                    if (envelope.SenderId != Utils.Utils.GetGuid())
                     {
-                        EnveloppeEnvoieCatalogue enveloppeCatalogue = new EnveloppeEnvoieCatalogue();
-                        enveloppeCatalogue.Type = 1;
-                        enveloppeCatalogue.Guid = Utils.Utils.GetGuid();
-                        enveloppeCatalogue.Content = LocalMusicList;
-                        
-                        GenericEnvelope response = new GenericEnvelope();
-                        response.MessageType = MessageType.ENVOIE_CATALOGUE;
-                        response.SenderId = Utils.Utils.GetGuid();
-                        response.EnveloppeJson = enveloppeCatalogue.ToJson();
-        
-                        if (mqttClient == null || !mqttClient.IsConnected)
+                        switch (envelope.MessageType)
                         {
-                            MessageBox.Show("Client not connected. Reconnecting...");
-                            await mqttClient.ConnectAsync(options);
+                            case MessageType.DEMANDE_CATALOGUE:
+                                GenericEnvelope res = Utils.Utils.CreateEnveloppeCatalogSender(LocalMusicList, MessageType.ENVOIE_CATALOGUE);
+        
+                                if (mqttClient == null || !mqttClient.IsConnected)
+                                {
+                                    MessageBox.Show("Client not connected. Reconnecting...");
+                                    await mqttClient.ConnectAsync(options);
+                                }
+
+                                Utils.Utils.SendMessage(mqttClient, res, Utils.Utils.GetTopic());
+                        
+                                Console.WriteLine("Message sent successfully!");
+                                break;
+                            
+                            case MessageType.ENVOIE_CATALOGUE:
+                                EnveloppeEnvoieCatalogue enveloppe = JsonSerializer.Deserialize<EnveloppeEnvoieCatalogue>(envelope.EnveloppeJson);
+                                SendersCatalogs.Add(envelope.SenderId, enveloppe.Content);
+                                break;
                         }
-
-                        // Créez le message à envoyer
-                        var message = new MqttApplicationMessageBuilder()
-                            .WithTopic(Utils.Utils.GetTopic())
-                            .WithPayload(JsonSerializer.Serialize(response))
-                            .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
-                            .WithRetainFlag(false)
-                            .Build();
-
-                        // Envoyez le message
-                        mqttClient.PublishAsync(message);
-                        Console.WriteLine("Message sent successfully!");
                     }
-
-                    return;
                 };
 
 

@@ -28,45 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
-            sendButton = new Button();
+            sendButton = new System.Windows.Forms.Button();
+            fileDataGridView = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)fileDataGridView).BeginInit();
             SuspendLayout();
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(327, 248);
-            label1.Name = "label1";
-            label1.Size = new Size(38, 15);
-            label1.TabIndex = 0;
-            label1.Text = "label1";
             // 
             // sendButton
             // 
-            sendButton.Location = new Point(182, 56);
+            sendButton.Location = new System.Drawing.Point(81, 51);
             sendButton.Name = "sendButton";
-            sendButton.Size = new Size(75, 23);
+            sendButton.Size = new System.Drawing.Size(75, 23);
             sendButton.TabIndex = 1;
             sendButton.Text = "button1";
             sendButton.UseVisualStyleBackColor = true;
             sendButton.Click += sendButton_Click;
             // 
+            // fileDataGridView
+            // 
+            fileDataGridView.Location = new System.Drawing.Point(247, 12);
+            fileDataGridView.Name = "fileDataGridView";
+            fileDataGridView.Size = new System.Drawing.Size(807, 638);
+            fileDataGridView.TabIndex = 2;
+            // 
             // LobbyPage
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(1066, 662);
+            Controls.Add(fileDataGridView);
             Controls.Add(sendButton);
-            Controls.Add(label1);
-            Name = "LobbyPage";
             Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)fileDataGridView).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
+
+        private System.Windows.Forms.DataGridView fileDataGridView;
 
         #endregion
 
-        private Label label1;
-        private Button sendButton;
+        private System.Windows.Forms.Button sendButton;
     }
 }

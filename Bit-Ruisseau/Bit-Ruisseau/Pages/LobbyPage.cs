@@ -23,11 +23,14 @@ namespace Bit_Ruisseau.Pages
             InitializeComponent();
             client = _client;
             localCatalog = _localCatalog;
+            
+            this.fileDataGridView.DataSource = localCatalog;
+            this.fileDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private async void sendButton_Click(object sender, EventArgs e)
         {
-            Utils.Utils.SendMessage(this.client, "HELLO, qui a des musiques ?", Utils.Utils.GetTopic(), MessageType.DEMANDE_CATALOGUE);
+            // Utils.Utils.SendMessage(this.client, "HELLO, qui a des musiques ?", Utils.Utils.GetTopic(), MessageType.DEMANDE_CATALOGUE);
         }
     }
 }

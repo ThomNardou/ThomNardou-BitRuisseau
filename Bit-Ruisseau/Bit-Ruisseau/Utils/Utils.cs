@@ -33,12 +33,9 @@ namespace Bit_Ruisseau.Utils
             return "thomasTest";
         }
 
-        public static async void SendMessage(IMqttClient _client, string _message, string _topic, MessageType type)
+        public static async void SendMessage(IMqttClient _client, GenericEnvelope _envelope, string _topic)
         {
-            GenericEnvelope enveloppe = new GenericEnvelope();
-            string classJson = "";
             
-            enveloppe.SenderId = GetGuid();
 
             await _client.SubscribeAsync(new MqttTopicFilterBuilder()
                 .WithTopic(_topic)
@@ -48,59 +45,43 @@ namespace Bit_Ruisseau.Utils
 
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(_topic)
-                .WithPayload(JsonSerializer.Serialize(enveloppe))
+                .WithPayload(JsonSerializer.Serialize(_envelope))
                 .WithQualityOfServiceLevel(MqttQualityOfServiceLevel.AtLeastOnce)
                 .WithRetainFlag()
                 .Build();
             await _client.PublishAsync(message);
         }
 
-        public static GenericEnvelope Create(MessageType type, IMessage message)
-        {
-            GenericEnvelope envelope = new GenericEnvelope();
-            
-
-            envelope.EnveloppeJson = message.ToJson();
-
-            //string json = JsonSerializer.Serialize(enveloppeEnvoieFichier);
-
-            envelope.SenderId = GetGuid();
-            envelope.MessageType = type;
-            envelope.EnveloppeJson = message.ToJson();
-
-            return envelope;
-        }
-
-        public static GenericEnvelope CreateEnveloppeFileSender(string _content, MessageType type)
-        {
-            GenericEnvelope envelope = new GenericEnvelope();
-            EnveloppeEnvoieFichier enveloppeEnvoieFichier = new EnveloppeEnvoieFichier();
-
-            enveloppeEnvoieFichier.Content = _content;
-
-            string json = JsonSerializer.Serialize(enveloppeEnvoieFichier);
-
-            envelope.SenderId = GetGuid();
-            envelope.MessageType = type;
-            envelope.EnveloppeJson = json;
-
-            return envelope;
-        }
-
         public static GenericEnvelope CreateEnveloppeCatalogSender(List<MediaData> _list, MessageType _type)
         {
-            GenericEnvelope envelope = new GenericEnvelope();
-            EnveloppeEnvoieCatalogue enveloppeEnvoieFichier = new EnveloppeEnvoieCatalogue();
+            GenericEnvelope response = new GenericEnvelope();
+            response.MessageType = _type;
+            response.SenderId = GetGuid();
 
-            enveloppeEnvoieFichier.Content = _list;
+            switch (_type)
+            {
+                case MessageType.ENVOIE_CATALOGUE:
+                    EnveloppeEnvoieCatalogue enveloppeCatalogue = new EnveloppeEnvoieCatalogue();
+                    enveloppeCatalogue.Type = 1;
+                    enveloppeCatalogue.Guid = GetGuid();
+                    enveloppeCatalogue.Content = _list;
+                        
+                    response.EnveloppeJson = enveloppeCatalogue.ToJson();
+                    break;
+                case MessageType.DEMANDE_CATALOGUE:
+                    EnveloppeDemandeCatalogue enveloppeDemandeCatalogue = new EnveloppeDemandeCatalogue();
+                    enveloppeDemandeCatalogue.Type = 2;
+                    enveloppeDemandeCatalogue.Guid = GetGuid();
+                    enveloppeDemandeCatalogue.Content = "Demande de catalogue";
+                    
+                    response.EnveloppeJson = enveloppeDemandeCatalogue.ToJson();
+                    break;
+            }
+            
+            
+            
 
-            string json = JsonSerializer.Serialize(enveloppeEnvoieFichier);
-
-            envelope.SenderId = GetGuid();
-            envelope.MessageType = _type;
-            envelope.EnveloppeJson = json;
-
-            return envelope;
+            return response;
         }
 
         //public static List<MediaData> GetFiles()
