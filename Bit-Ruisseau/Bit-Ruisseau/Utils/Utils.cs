@@ -33,18 +33,19 @@ namespace Bit_Ruisseau.Utils
             return "Thomas-" + guid;
         }
 
-        public static string GetTopic()
+        public static string GetGeneralTopic()
         {
-            return "thomasTest";
+            return "global";
+        }
+        
+        public static string GetPersonalTopic()
+        {
+            return "thomas";
         }
 
         public static async void SendMessage(IMqttClient _client, GenericEnvelope _envelope, string _topic)
         {
-            await _client.SubscribeAsync(new MqttTopicFilterBuilder()
-                .WithTopic(_topic)
-                .WithNoLocal(true)
-                .Build()
-                );
+            
 
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(_topic)

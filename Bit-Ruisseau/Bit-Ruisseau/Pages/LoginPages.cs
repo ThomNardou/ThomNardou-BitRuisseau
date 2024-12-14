@@ -27,7 +27,7 @@ namespace Bit_Ruisseau.Pages
             InitializeComponent();
             Utils.Utils.LocalMusicList = new List<MediaData>();
             Utils.Utils.SendersCatalogs = new Dictionary<string, List<MediaData>>();
-            this.hostBox.Text = "blue.section-inf.ch";
+            this.hostBox.Text = "127.0.0.1";
             this.userBox.Text = "ict";
             this.passwordBox.Text = "321";
         }

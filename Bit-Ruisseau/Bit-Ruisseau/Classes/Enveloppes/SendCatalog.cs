@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Bit_Ruisseau.Interface;
 
 namespace Bit_Ruisseau.Classes.Enveloppes
 {
-    public class SendCatalog
+    public class SendCatalog : IMessage
     {
         /*
             type 1
