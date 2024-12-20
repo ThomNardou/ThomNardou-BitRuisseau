@@ -40,6 +40,7 @@
             fileDataGridView.Name = "fileDataGridView";
             fileDataGridView.Size = new System.Drawing.Size(807, 638);
             fileDataGridView.TabIndex = 2;
+            fileDataGridView.CellContentClick += fileDataGridView_CellContentClick;
             // 
             // yourFiles
             // 

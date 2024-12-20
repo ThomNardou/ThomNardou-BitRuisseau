@@ -18,10 +18,13 @@ public class FilesUtils
         {
             string path = $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{music.Title}{music.Type}";
             byte[] file = File.ReadAllBytes(path);
+            
+            
 
             string base64 = Convert.ToBase64String(file);
             SendMusic enveloppeSendMusic = new SendMusic
             {
+                FileInfo = music,
                 Content = base64
             };
 

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Bit_Ruisseau.Classes;
 using Bit_Ruisseau.Enums;
+using Bit_Ruisseau.Utils;
 
 namespace Bit_Ruisseau.Pages
 {
@@ -18,6 +19,7 @@ namespace Bit_Ruisseau.Pages
     {
         private IMqttClient client;
         private List<MediaData> localCatalog;
+        private bool isLocal = true;
 
         public LobbyPage(IMqttClient _client, List<MediaData> _localCatalog)
         {
@@ -33,12 +35,28 @@ namespace Bit_Ruisseau.Pages
         {
             this.fileDataGridView.DataSource = null;
             this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
+            isLocal = true;
         }
 
         private void changeviewCatalog_button_Click(object sender, EventArgs e)
         {
             this.fileDataGridView.DataSource = null;
             this.fileDataGridView.DataSource = Utils.Utils.CatalogList;
+            isLocal = false;
+        }
+
+        private void fileDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
+            {
+                if (!isLocal)
+                {
+                    MediaData selectedMedia = Utils.Utils.CatalogList[e.RowIndex];
+                    MessageUtilis.AskFile(selectedMedia);
+            
+                    Console.WriteLine("File selected : " + Utils.Utils.CatalogList[e.RowIndex].Title);
+                }
+            }
         }
     }
 }

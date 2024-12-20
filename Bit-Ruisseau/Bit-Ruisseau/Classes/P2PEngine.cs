@@ -10,6 +10,7 @@ namespace Bit_Ruisseau.Classes;
 
 public class P2PEngine
 {
+    public static IMqttClient MqttClient { get; set; }
     public async void Connect(string hostBoxText, string userBoxText, string passwordBoxText, Form _form)
     {
         //todo Environment.SpecialFolder.LocalApplicationData
@@ -59,6 +60,8 @@ public class P2PEngine
                 Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
 
             Utils.Utils.SendMessage(mqttClient, sender, Utils.Utils.GetGeneralTopic());
+            
+            MqttClient = mqttClient;
 
 
             /////////////////////////// RECEIVE MESSAGES EVENT ///////////////////////////
@@ -95,7 +98,7 @@ public class P2PEngine
             );
             
             var personalSub = await mqttClient.SubscribeAsync(
-                subBuilder.WithTopic(Utils.Utils.GetPersonalTopic()).Build()
+                subBuilder.WithTopic(Utils.Utils.GetGuid()).Build()
             );
             
     

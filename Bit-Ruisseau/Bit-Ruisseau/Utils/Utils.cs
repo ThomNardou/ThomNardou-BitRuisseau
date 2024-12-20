@@ -36,7 +36,7 @@ namespace Bit_Ruisseau.Utils
 
         public static string GetGuid()
         {
-            return "Thomas-" + guid;
+            return "Thomas-asda";
         }
 
         public static string GetGeneralTopic()
@@ -52,7 +52,6 @@ namespace Bit_Ruisseau.Utils
         public static async void SendMessage(IMqttClient _client, GenericEnvelope _envelope, string _topic)
         {
             
-
             var message = new MqttApplicationMessageBuilder()
                 .WithTopic(_topic)
                 .WithPayload(JsonSerializer.Serialize(_envelope))
@@ -87,6 +86,14 @@ namespace Bit_Ruisseau.Utils
                     };
 
                     response.EnveloppeJson = askCatalog.ToJson();
+                    break;
+                case MessageType.DEMANDE_FICHIER:
+                    AskMusic askMusic = new AskMusic
+                    {
+                        FileName = _list.First().Title + _list.First().Type
+                    };
+
+                    response.EnveloppeJson = askMusic.ToJson();
                     break;
             }
             

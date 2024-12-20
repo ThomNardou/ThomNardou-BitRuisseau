@@ -33,8 +33,23 @@ public class MessageUtilis
                 }
 
                 break;
+            
+            case MessageType.ENVOIE_FICHIER:
+                SendMusic enveloppeSendMusic = JsonSerializer.Deserialize<SendMusic>(_envelope.EnveloppeJson);
+                MediaData music = enveloppeSendMusic.FileInfo;
+                
+                byte[] file = Convert.FromBase64String(enveloppeSendMusic.Content);
+                string path = $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{music.Title}{music.Type}";
+                File.WriteAllBytes(path, file);
+                break;
         }
     }
 
+    public static void AskFile(MediaData media)
+    {
+        string userTopic = Utils.SendersCatalogs.First(sender => sender.Value.Contains(media)).Key.ToString();
+        GenericEnvelope sender = Utils.CreateGenericEnvelop(new List<MediaData>() {media}, MessageType.DEMANDE_FICHIER);
+        Utils.SendMessage(P2PEngine.MqttClient, sender, userTopic);
+    }
     
 }
