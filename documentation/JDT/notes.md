@@ -11,3 +11,6 @@
 - 22m J'ai fait l'évaluation intermédiaire avec M. Melly 
 - 15m J'ai modifié mon code pour qu'il prenne en compte les remarques de M. Melly
 - 10m J'ai aidé Lucas à regler un problème qu'il avait 
+
+## 20.12.2024
+- 38m j'ai pas fait grand chose car j'étais fatigué et j'arrivais plus à me concentrer 
