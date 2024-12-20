@@ -29,7 +29,7 @@ public class P2PEngine
             FileInfo fi = new FileInfo(path);
             media.Size = fi.Length;
 
-            media.Title = tfile.Tag.Title;
+            media.Title = fi.Name.Replace(fi.Extension, "");
             media.Type = Path.GetExtension(path);
             media.Artist = tfile.Tag.FirstPerformer;
             TimeSpan duration = tfile.Properties.Duration;
@@ -67,8 +67,6 @@ public class P2PEngine
                 string receivedMessage = Encoding.UTF8.GetString(e.ApplicationMessage.Payload);
 
                 GenericEnvelope envelope = JsonSerializer.Deserialize<GenericEnvelope>(receivedMessage);
-                
-                Console.WriteLine("Message received: " + envelope.MessageType);
 
                 if (envelope.SenderId != Utils.Utils.GetGuid())
                 {
@@ -84,8 +82,6 @@ public class P2PEngine
                         case MessageType.DEMANDE_CATALOGUE:
                             GenericEnvelope res = Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList, MessageType.ENVOIE_CATALOGUE);
                             Utils.Utils.SendMessage(mqttClient, res, Utils.Utils.GetGeneralTopic());
-
-                            Console.WriteLine("Message sent successfully!");
                             break;
 
                         case MessageType.ENVOIE_CATALOGUE:
@@ -95,11 +91,31 @@ public class P2PEngine
                             enveloppeSendCatalog.Content.ForEach(media => { Utils.Utils.CatalogList.Add(media); });
                             break;
                         
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
                         case MessageType.DEMANDE_FICHIER:
                             AskMusic enveloppeAskMusic = JsonSerializer.Deserialize<AskMusic>(envelope.EnveloppeJson);
-                            MediaData music = Utils.Utils.CatalogList.Find(media => media.Title == enveloppeAskMusic.FileName);
+                            
+                            Utils.Utils.LocalMusicList.ForEach(media =>
+                            {
 
-                            Console.WriteLine("Music found: " + music.Title);
+                                Console.WriteLine($"{media.Title}{media.Type}" == enveloppeAskMusic.FileName ? "Found" : "Not found");
+
+                            });
+                            
+                            MediaData music = Utils.Utils.LocalMusicList.Where(media => $"{media.Title}{media.Type}" == enveloppeAskMusic.FileName).First();
+                            
+
                             if (music != null)
                             {
                                 string path = $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{music.Title}{music.Type}";
@@ -122,8 +138,25 @@ public class P2PEngine
                                 
                                 Utils.Utils.SendMessage(mqttClient, response, enveloppeAskMusic.PersonnalTopic);
                             }
+                            else
+                            {
+                                Console.WriteLine("Music not found.");
+                            }
+                            break;
+                        
+                        
+                        
+                        
+                        
+                        
+                        default:
+                            Console.WriteLine("Unknown message type.");
                             break;
                     }
+                }
+                else
+                {
+                    Console.WriteLine("Message from self.");
                 }
             };
 
