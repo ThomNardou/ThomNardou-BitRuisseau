@@ -8,13 +8,14 @@ using Bit_Ruisseau.Interface;
 
 namespace Bit_Ruisseau.Classes.Enveloppes
 {
+    /// <summary>
+    /// Class qui représente le catalogue d'un autre client
+    /// </summary>
     public class SendCatalog : IMessage
     {
         /*
             type 1
         */
-        private int _type;
-        private string _guid;
         private List<MediaData> _content;
 
         public List<MediaData>? Content
@@ -23,17 +24,6 @@ namespace Bit_Ruisseau.Classes.Enveloppes
             set => _content = value;
         }
 
-        public int Type
-        {
-            get => _type;
-            set => _type = value;
-        }
-
-        public string Guid
-        {
-            get => _guid;
-            set => _guid = value;
-        }
 
         public string ToJson()
         {

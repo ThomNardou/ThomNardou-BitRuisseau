@@ -23,8 +23,14 @@ namespace Bit_Ruisseau.Utils
 
         public static P2PEngine Engine = new P2PEngine();
         
+        
+        // Liste de musique en Local
         public static List<MediaData> LocalMusicList;
+        
+        // Liste de catalogue des autres utilisateurs
         public static Dictionary<string, List<MediaData>> SendersCatalogs;
+        
+        // Liste global des fichiers disponibles
         public static List<MediaData> CatalogList = new List<MediaData>();
         
 
@@ -69,8 +75,6 @@ namespace Bit_Ruisseau.Utils
                 case MessageType.ENVOIE_CATALOGUE:
                     SendCatalog enveloppeCatalogue = new SendCatalog
                     {
-                        Type = 1,
-                        Guid = GetGuid(),
                         Content = _list
                     };
 
@@ -79,8 +83,6 @@ namespace Bit_Ruisseau.Utils
                 case MessageType.DEMANDE_CATALOGUE:
                     AskCatalog askCatalog = new AskCatalog
                     {
-                        Type = 2,
-                        Guid = GetGuid(),
                         Content = "Demande de catalogue"
                     };
 

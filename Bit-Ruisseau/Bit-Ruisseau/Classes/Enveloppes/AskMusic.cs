@@ -1,44 +1,28 @@
 ﻿using System.Text.Json;
 using Bit_Ruisseau.Interface;
 
-namespace Bit_Ruisseau.Classes.Enveloppes;
-
-public class AskMusic : IMessage
+namespace Bit_Ruisseau.Classes.Enveloppes
 {
-    /*
-        type 4
-    */
-    private int _type;
-    private string _guid;
-    private string _personnal_topic;
-    private string _file_name;
-
-    public int Type
+    /// <summary>
+    /// Class qui représente une demande de musique (Le fichier va être envoyé)
+    /// </summary>
+    public class AskMusic : IMessage
     {
-        get => _type;
-        set => _type = value;
-    }
+        /*
+            type 4
+        */
+        private string _file_name;
 
-    public string Guid
-    {
-        get => _guid;
-        set => _guid = value;
-    }
+        public string FileName
+        {
+            get => _file_name;
+            set => _file_name = value;
+        }
 
-    public string FileName
-    {
-        get => _file_name;
-        set => _file_name = value;
-    }
-
-    public string PersonnalTopic
-    {
-        get => _personnal_topic;
-        set => _personnal_topic = value;
-    }
-
-    public string ToJson()
-    {
-        return JsonSerializer.Serialize(this);
+        public string ToJson()
+        {
+            return JsonSerializer.Serialize(this);
+        }
     }
 }
+

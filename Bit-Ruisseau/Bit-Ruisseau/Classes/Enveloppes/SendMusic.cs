@@ -8,26 +8,15 @@ using System.Threading.Tasks;
 
 namespace Bit_Ruisseau.Classes.Enveloppes
 {
+    /// <summary>
+    /// Class qui représente le fichier d'un autre client
+    /// </summary>
     public class SendMusic : IMessage
     {
         /*
             type 3
         */
-        private int _type;
-        private string _guid;
         private string _content;
-
-        public int Type
-        {
-            get => _type;
-            set => _type = value;
-        }
-
-        public string Guid
-        {
-            get => _guid;
-            set => _guid = value;
-        }
 
         public string Content
         {

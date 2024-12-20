@@ -53,8 +53,8 @@ public class P2PEngine
 
         if (res.ResultCode == MqttClientConnectResultCode.Success)
         {
-            Debug.WriteLine("Connected to MQTT broker successfully.");
-            Debug.WriteLine("GUID: " + Utils.Utils.GetGuid());
+            Console.WriteLine("Connected to MQTT broker successfully.");
+            
             GenericEnvelope sender =
                 Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
 
@@ -77,82 +77,8 @@ public class P2PEngine
                         await mqttClient.ConnectAsync(options);
                     }
                     
-                    switch (envelope.MessageType)
-                    {
-                        case MessageType.DEMANDE_CATALOGUE:
-                            GenericEnvelope res = Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList, MessageType.ENVOIE_CATALOGUE);
-                            Utils.Utils.SendMessage(mqttClient, res, Utils.Utils.GetGeneralTopic());
-                            break;
-
-                        case MessageType.ENVOIE_CATALOGUE:
-                            SendCatalog enveloppeSendCatalog = JsonSerializer.Deserialize<SendCatalog>(envelope.EnveloppeJson);
-                            Utils.Utils.SendersCatalogs.Add(envelope.SenderId, enveloppeSendCatalog.Content);
-
-                            enveloppeSendCatalog.Content.ForEach(media => { Utils.Utils.CatalogList.Add(media); });
-                            break;
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        case MessageType.DEMANDE_FICHIER:
-                            AskMusic enveloppeAskMusic = JsonSerializer.Deserialize<AskMusic>(envelope.EnveloppeJson);
-                            
-                            Utils.Utils.LocalMusicList.ForEach(media =>
-                            {
-
-                                Console.WriteLine($"{media.Title}{media.Type}" == enveloppeAskMusic.FileName ? "Found" : "Not found");
-
-                            });
-                            
-                            MediaData music = Utils.Utils.LocalMusicList.Where(media => $"{media.Title}{media.Type}" == enveloppeAskMusic.FileName).First();
-                            
-
-                            if (music != null)
-                            {
-                                string path = $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{music.Title}{music.Type}";
-                                byte[] file = File.ReadAllBytes(path);
-                                
-                                string base64 = Convert.ToBase64String(file);
-                                SendMusic enveloppeSendMusic = new SendMusic
-                                {
-                                    Type = 3,
-                                    Guid = Utils.Utils.GetGuid(),
-                                    Content = base64
-                                };
-                                
-                                GenericEnvelope response = new GenericEnvelope
-                                {
-                                    MessageType = MessageType.ENVOIE_FICHIER,
-                                    SenderId = Utils.Utils.GetGuid(),
-                                    EnveloppeJson = enveloppeSendMusic.ToJson()
-                                };
-                                
-                                Utils.Utils.SendMessage(mqttClient, response, enveloppeAskMusic.PersonnalTopic);
-                            }
-                            else
-                            {
-                                Console.WriteLine("Music not found.");
-                            }
-                            break;
-                        
-                        
-                        
-                        
-                        
-                        
-                        default:
-                            Console.WriteLine("Unknown message type.");
-                            break;
-                    }
+                    Utils.MessageUtilis.OnMessageReceived(envelope, mqttClient);
+                    
                 }
                 else
                 {
@@ -163,6 +89,7 @@ public class P2PEngine
             var subBuilder = new MqttTopicFilterBuilder()
                 .WithNoLocal(true);
             
+            // Abonnement aux topic global et personnel
             var globalSub = await mqttClient.SubscribeAsync(
                 subBuilder.WithTopic(Utils.Utils.GetGeneralTopic()).Build()
             );
