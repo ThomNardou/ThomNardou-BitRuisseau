@@ -15,10 +15,10 @@ namespace Bit_Ruisseau.Classes
         string _senderId;
         MessageType _messageType;
 
-        string _envelopJson;//classe specefique serialisee
+        string _envelopeJson;//classe specefique serialisee
 
         public MessageType MessageType { get => _messageType; set => _messageType = value; }
         public string SenderId { get => _senderId; set => _senderId = value; }
-        public string EnvelopJson { get => _envelopJson; set => _envelopJson = value; }
+        public string EnvelopeJson { get => _envelopeJson; set => _envelopeJson = value; }
     }
 }

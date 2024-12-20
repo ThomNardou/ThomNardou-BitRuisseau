@@ -7,9 +7,15 @@ namespace Bit_Ruisseau.Utils;
 
 public class FilesUtils
 {
+    
+    /// <summary>
+    /// Fonction qui permet de gérer une demande de fichier
+    /// </summary>
+    /// <param name="_enveloppe"></param>
+    /// <returns> Une enveloppe générique </returns>
     public static GenericEnvelope OnFileRequest(GenericEnvelope _enveloppe)
     {
-        AskMusic enveloppeAskMusic = JsonSerializer.Deserialize<AskMusic>(_enveloppe.EnvelopJson);
+        AskMusic enveloppeAskMusic = JsonSerializer.Deserialize<AskMusic>(_enveloppe.EnvelopeJson);
         
         MediaData music = Utils.LocalMusicList.First(media => $"{media.Title}{media.Type}" == enveloppeAskMusic.FileName);
 
@@ -32,7 +38,7 @@ public class FilesUtils
             {
                 MessageType = MessageType.ENVOIE_FICHIER,
                 SenderId = Utils.GetGuid(),
-                EnvelopJson = enveloppeSendMusic.ToJson()
+                EnvelopeJson = enveloppeSendMusic.ToJson()
             };
 
             return response;
@@ -41,9 +47,13 @@ public class FilesUtils
         return null;
     }
     
+    /// <summary>
+    /// Fonction qui permet de télécharger un fichier
+    /// </summary>
+    /// <param name="_envelope"> Générique enveloppe reçu </param>
     public static void DownloadFile(GenericEnvelope _envelope)
     {
-        SendMusic enveloppeSendMusic = JsonSerializer.Deserialize<SendMusic>(_envelope.EnvelopJson);
+        SendMusic enveloppeSendMusic = JsonSerializer.Deserialize<SendMusic>(_envelope.EnvelopeJson);
         MediaData music = enveloppeSendMusic.FileInfo;
                 
         byte[] file = Convert.FromBase64String(enveloppeSendMusic.Content);

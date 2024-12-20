@@ -34,21 +34,34 @@ namespace Bit_Ruisseau.Utils
         public static List<MediaData> CatalogList = new List<MediaData>();
         
 
+        /// <summary>
+        /// Fonction qui retourne un GUID
+        /// </summary>
+        /// <returns>
+        /// Un GUID en string
+        /// </returns>
         public static string GetGuid()
         {
             return "Thomas-asda";
         }
 
+        /// <summary>
+        /// Fonction qui retourne le topic global du broker
+        /// </summary>
+        /// <returns>
+        /// Un string qui représente le topic global
+        /// </returns>
         public static string GetGeneralTopic()
         {
             return "global";
         }
-        
-        public static string GetPersonalTopic()
-        {
-            return "thomas";
-        }
 
+        /// <summary>
+        /// Fonction qui permet d'envoyer un message sur un topic donné
+        /// </summary>
+        /// <param name="_client"> Client mqtt </param>
+        /// <param name="_envelope"> Enveloppe du message </param>
+        /// <param name="_topic"> Topic sur lequel le message va être envoyé </param>
         public static async void SendMessage(IMqttClient _client, GenericEnvelope _envelope, string _topic)
         {
             
@@ -61,6 +74,12 @@ namespace Bit_Ruisseau.Utils
             await _client.PublishAsync(message);
         }
 
+        /// <summary>
+        /// Fonction qui permet de créer une enveloppe générique
+        /// </summary>
+        /// <param name="_list"> Paramètre qui contient des information des fichiers </param>
+        /// <param name="_type"> Type du message </param>
+        /// <returns> Une enveloppe générique </returns>
         public static GenericEnvelope CreateGenericEnvelop(List<MediaData> _list, MessageType _type)
         {
             GenericEnvelope response = new GenericEnvelope
@@ -77,7 +96,7 @@ namespace Bit_Ruisseau.Utils
                         Content = _list
                     };
 
-                    response.EnvelopJson = enveloppeCatalogue.ToJson();
+                    response.EnvelopeJson = enveloppeCatalogue.ToJson();
                     break;
                 case MessageType.DEMANDE_CATALOGUE:
                     AskCatalog askCatalog = new AskCatalog
@@ -85,7 +104,7 @@ namespace Bit_Ruisseau.Utils
                         Content = "Demande de catalogue"
                     };
 
-                    response.EnvelopJson = askCatalog.ToJson();
+                    response.EnvelopeJson = askCatalog.ToJson();
                     break;
                 case MessageType.DEMANDE_FICHIER:
                     AskMusic askMusic = new AskMusic
@@ -93,19 +112,10 @@ namespace Bit_Ruisseau.Utils
                         FileName = _list.First().Title + _list.First().Type
                     };
 
-                    response.EnvelopJson = askMusic.ToJson();
+                    response.EnvelopeJson = askMusic.ToJson();
                     break;
             }
-            
-            
-            
-
             return response;
         }
-
-        //public static List<MediaData> GetFiles()
-        //{
-
-        //}
     }
 }

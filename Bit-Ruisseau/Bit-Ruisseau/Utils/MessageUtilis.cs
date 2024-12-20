@@ -8,6 +8,12 @@ namespace Bit_Ruisseau.Utils;
 
 public class MessageUtilis
 {
+    
+    /// <summary>
+    /// Fonction qui est appelée lorsqu'un message est reçu
+    /// </summary>
+    /// <param name="_envelope"> Enveloppe générique </param>
+    /// <param name="_mqttClient"> Client MQTT </param>
     public static void OnMessageReceived(GenericEnvelope _envelope, IMqttClient _mqttClient)
     {
         Console.WriteLine("Message received: " + _envelope.MessageType);
@@ -40,6 +46,10 @@ public class MessageUtilis
         }
     }
 
+    /// <summary>
+    /// Fonction qui permet de demander un fichier
+    /// </summary>
+    /// <param name="media"> Métadonnées du fichier </param>
     public static void AskFile(MediaData media)
     {
         string userTopic = Utils.SendersCatalogs.First(sender => sender.Value.Contains(media)).Key.ToString();
