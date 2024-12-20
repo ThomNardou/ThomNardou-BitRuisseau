@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Bit_Ruisseau.Classes
 {
+    /// <summary>
+    /// Class qui représente les métadonnées d'un fichier
+    /// </summary>
     public class MediaData
     {
         private string _title;

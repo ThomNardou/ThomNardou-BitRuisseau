@@ -13,7 +13,7 @@ public class P2PEngine
     public static IMqttClient MqttClient { get; set; }
     public async void Connect(string hostBoxText, string userBoxText, string passwordBoxText, Form _form)
     {
-        //todo Environment.SpecialFolder.LocalApplicationData
+        // Liste et enregistre les fichier locaux
         if (!Directory.Exists($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics"))
         {
             Directory.CreateDirectory($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics");
@@ -42,6 +42,7 @@ public class P2PEngine
 
         var mqttClient = factory.CreateMqttClient();
 
+        // Configuration du client MQTT
         var options = new MqttClientOptionsBuilder()
             .WithTcpServer(hostBoxText, 1883)
             .WithCredentials(userBoxText, passwordBoxText)
@@ -58,11 +59,24 @@ public class P2PEngine
             
             GenericEnvelope sender =
                 Utils.Utils.CreateGenericEnvelop(Utils.Utils.LocalMusicList, MessageType.DEMANDE_CATALOGUE);
-
+            
+            
+            // Abonnement aux topic global et personnel
+            var subBuilder = new MqttTopicFilterBuilder()
+                .WithNoLocal(true);
+            var globalSub = await mqttClient.SubscribeAsync(
+                subBuilder.WithTopic(Utils.Utils.GetGeneralTopic()).Build()
+            );
+            
+            var personalSub = await mqttClient.SubscribeAsync(
+                subBuilder.WithTopic(Utils.Utils.GetGuid()).Build()
+            );
+            
+            
+            // Envoie du message pour demander le catalogue
             Utils.Utils.SendMessage(mqttClient, sender, Utils.Utils.GetGeneralTopic());
             
             MqttClient = mqttClient;
-
 
             /////////////////////////// RECEIVE MESSAGES EVENT ///////////////////////////
             mqttClient.ApplicationMessageReceivedAsync += async e =>
@@ -89,17 +103,6 @@ public class P2PEngine
                 }
             };
 
-            var subBuilder = new MqttTopicFilterBuilder()
-                .WithNoLocal(true);
-            
-            // Abonnement aux topic global et personnel
-            var globalSub = await mqttClient.SubscribeAsync(
-                subBuilder.WithTopic(Utils.Utils.GetGeneralTopic()).Build()
-            );
-            
-            var personalSub = await mqttClient.SubscribeAsync(
-                subBuilder.WithTopic(Utils.Utils.GetGuid()).Build()
-            );
             
     
 
@@ -109,6 +112,7 @@ public class P2PEngine
             }
 
 
+            // Changement de page vers le lobby
             LobbyPage lobby = new LobbyPage(mqttClient, Utils.Utils.LocalMusicList);
             lobby.Location = _form.Location;
             lobby.StartPosition = FormStartPosition.Manual;

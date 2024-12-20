@@ -35,12 +35,7 @@ public class MessageUtilis
                 break;
             
             case MessageType.ENVOIE_FICHIER:
-                SendMusic enveloppeSendMusic = JsonSerializer.Deserialize<SendMusic>(_envelope.EnveloppeJson);
-                MediaData music = enveloppeSendMusic.FileInfo;
-                
-                byte[] file = Convert.FromBase64String(enveloppeSendMusic.Content);
-                string path = $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{music.Title}{music.Type}";
-                File.WriteAllBytes(path, file);
+                FilesUtils.DownloadFile(_envelope);
                 break;
         }
     }

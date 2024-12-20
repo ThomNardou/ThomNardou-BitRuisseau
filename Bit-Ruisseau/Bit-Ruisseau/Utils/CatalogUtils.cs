@@ -8,7 +8,7 @@ public class CatalogUtils
 {
     public static void OnCatalogReceived(GenericEnvelope _envelope)
     {
-        SendCatalog enveloppeSendCatalog = JsonSerializer.Deserialize<SendCatalog>(_envelope.EnveloppeJson);
+        SendCatalog enveloppeSendCatalog = JsonSerializer.Deserialize<SendCatalog>(_envelope.EnvelopJson);
         Utils.SendersCatalogs.Add(_envelope.SenderId, enveloppeSendCatalog.Content);
 
         enveloppeSendCatalog.Content.ForEach(media => { Utils.CatalogList.Add(media); });

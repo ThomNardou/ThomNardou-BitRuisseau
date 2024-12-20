@@ -77,7 +77,7 @@ namespace Bit_Ruisseau.Utils
                         Content = _list
                     };
 
-                    response.EnveloppeJson = enveloppeCatalogue.ToJson();
+                    response.EnvelopJson = enveloppeCatalogue.ToJson();
                     break;
                 case MessageType.DEMANDE_CATALOGUE:
                     AskCatalog askCatalog = new AskCatalog
@@ -85,7 +85,7 @@ namespace Bit_Ruisseau.Utils
                         Content = "Demande de catalogue"
                     };
 
-                    response.EnveloppeJson = askCatalog.ToJson();
+                    response.EnvelopJson = askCatalog.ToJson();
                     break;
                 case MessageType.DEMANDE_FICHIER:
                     AskMusic askMusic = new AskMusic
@@ -93,7 +93,7 @@ namespace Bit_Ruisseau.Utils
                         FileName = _list.First().Title + _list.First().Type
                     };
 
-                    response.EnveloppeJson = askMusic.ToJson();
+                    response.EnvelopJson = askMusic.ToJson();
                     break;
             }
             
