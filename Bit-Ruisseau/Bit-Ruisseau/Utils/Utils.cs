@@ -23,6 +23,8 @@ namespace Bit_Ruisseau.Utils
 
         public static P2PEngine Engine = new P2PEngine();
         
+        public static bool DownloadStarted = false;
+        
         
         // Liste de musique en Local
         public static List<MediaData> LocalMusicList;

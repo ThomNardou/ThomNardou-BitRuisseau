@@ -20,7 +20,6 @@ namespace Bit_Ruisseau.Pages
     {
         private IMqttClient client;
         private List<MediaData> localCatalog;
-        private bool isLocal = true;
 
         public LobbyPage(IMqttClient _client, List<MediaData> _localCatalog)
         {
@@ -40,16 +39,29 @@ namespace Bit_Ruisseau.Pages
 
         private void fileDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            Process.Start(new ProcessStartInfo
+            if (e.RowIndex >= 0)
             {
-                FileName =
-                    $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{Utils.Utils.LocalMusicList[e.RowIndex].Title}{Utils.Utils.LocalMusicList[e.RowIndex].Type}",
-                UseShellExecute = true
-            });
+                string path = $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{Utils.Utils.LocalMusicList[e.RowIndex].Title}{Utils.Utils.LocalMusicList[e.RowIndex].Type}";
+
+                if (File.Exists(path))
+                {
+                    Process.Start(new ProcessStartInfo
+                    {
+                        FileName = path,
+                        UseShellExecute = true
+                    });
+                }
+                else
+                {
+                    MessageBox.Show("Le fichier n'existe pas.");
+                }
+
+            }
         }
 
         private void refreshfilesButton_Click(object sender, EventArgs e)
         {
+            Utils.FilesUtils.GetLocalFiles();
             this.fileDataGridView.DataSource = null;
             this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
         }

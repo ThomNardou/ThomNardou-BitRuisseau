@@ -6,6 +6,8 @@ namespace Bit_Ruisseau.Pages;
 
 public partial class CatalogPage : Form
 {
+    
+
     public CatalogPage()
     {
         InitializeComponent();
@@ -15,12 +17,21 @@ public partial class CatalogPage : Form
 
     private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
     {
-        if (e.RowIndex >= 0)
+        if (e.RowIndex >= 0 || e.RowIndex < Utils.Utils.CatalogList.Count)
         {
+            if (!Utils.Utils.DownloadStarted)
+            {
                 MediaData selectedMedia = Utils.Utils.CatalogList[e.RowIndex];
                 MessageUtilis.AskFile(selectedMedia);
+                Utils.Utils.DownloadStarted = true;
             
                 Console.WriteLine("File selected : " + Utils.Utils.CatalogList[e.RowIndex].Title);
+                MessageBox.Show("Téléchargement en cours, veuillez patienter.");
+            }
+            else
+            {
+                MessageBox.Show("Un téléchargement est déjà en cours, veuillez patienter.");
+            }
         }
     }
 }

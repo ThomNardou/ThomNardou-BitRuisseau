@@ -13,30 +13,8 @@ public class P2PEngine
     public static IMqttClient MqttClient { get; set; }
     public async void Connect(string hostBoxText, string userBoxText, string passwordBoxText, Form _form)
     {
-        // Liste et enregistre les fichier locaux
-        if (!Directory.Exists($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics"))
-        {
-            Directory.CreateDirectory($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics");
-        }
-
-        List<string> paths = Directory.GetFiles($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics").ToList();
-
-
-        paths.ForEach(path =>
-        {
-            MediaData media = new MediaData();
-            var tfile = TagLib.File.Create(path);
-
-            FileInfo fi = new FileInfo(path);
-            media.Size = fi.Length;
-
-            media.Title = fi.Name.Replace(fi.Extension, "");
-            media.Type = Path.GetExtension(path);
-            media.Artist = tfile.Tag.FirstPerformer;
-            TimeSpan duration = tfile.Properties.Duration;
-            media.Duration = $"{duration.Minutes:D2}:{duration.Seconds:D2}";
-            Utils.Utils.LocalMusicList.Add(media);
-        });
+        
+        Utils.FilesUtils.GetLocalFiles();
 
         MqttClientFactory factory = new MqttClientFactory();
 

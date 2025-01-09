@@ -42,6 +42,7 @@ public class MessageUtilis
             
             case MessageType.ENVOIE_FICHIER:
                 FilesUtils.DownloadFile(_envelope);
+                Utils.DownloadStarted = false;
                 break;
         }
     }

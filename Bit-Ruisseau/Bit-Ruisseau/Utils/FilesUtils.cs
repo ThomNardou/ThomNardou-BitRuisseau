@@ -62,4 +62,38 @@ public class FilesUtils
         
         MessageBox.Show("Fichier téléchargé avec succès !");
     }
+
+    /// <summary>
+    /// Fonction qui permet de lister les fichiers locaux
+    /// </summary>
+    public static void GetLocalFiles()
+    {
+        
+        Utils.LocalMusicList.Clear();
+        
+        // Liste et enregistre les fichier locaux
+        if (!Directory.Exists($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics"))
+        {
+            Directory.CreateDirectory($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics");
+        }
+
+        List<string> paths = Directory.GetFiles($"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics").ToList();
+
+
+        paths.ForEach(path =>
+        {
+            MediaData media = new MediaData();
+            var tfile = TagLib.File.Create(path);
+
+            FileInfo fi = new FileInfo(path);
+            media.Size = fi.Length;
+
+            media.Title = fi.Name.Replace(fi.Extension, "");
+            media.Type = Path.GetExtension(path);
+            media.Artist = tfile.Tag.FirstPerformer;
+            TimeSpan duration = tfile.Properties.Duration;
+            media.Duration = $"{duration.Minutes:D2}:{duration.Seconds:D2}";
+            Utils.LocalMusicList.Add(media);
+        });
+    }
 }
