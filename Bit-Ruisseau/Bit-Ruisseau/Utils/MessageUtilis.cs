@@ -57,4 +57,10 @@ public class MessageUtilis
         Utils.SendMessage(P2PEngine.MqttClient, sender, userTopic);
     }
     
+    public static void AskCatalog()
+    {
+        GenericEnvelope sender = Utils.CreateGenericEnvelop(new List<MediaData>(), MessageType.DEMANDE_CATALOGUE);
+        Utils.SendMessage(P2PEngine.MqttClient, sender, Utils.GetGeneralTopic());
+    }
+    
 }

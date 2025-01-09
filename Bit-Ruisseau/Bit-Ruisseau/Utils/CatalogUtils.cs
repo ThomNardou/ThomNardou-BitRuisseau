@@ -14,8 +14,19 @@ public class CatalogUtils
     public static void OnCatalogReceived(GenericEnvelope _envelope)
     {
         SendCatalog enveloppeSendCatalog = JsonSerializer.Deserialize<SendCatalog>(_envelope.EnvelopeJson);
-        Utils.SendersCatalogs.Add(_envelope.SenderId, enveloppeSendCatalog.Content);
 
+        if (Utils.SendersCatalogs.ContainsKey(_envelope.SenderId))
+        {
+            Utils.SendersCatalogs[_envelope.SenderId].Clear();
+            Utils.SendersCatalogs[_envelope.SenderId] = enveloppeSendCatalog.Content;
+            
+        }
+        else
+        {
+            Utils.SendersCatalogs.Add(_envelope.SenderId, enveloppeSendCatalog.Content);
+        }
+
+        Utils.CatalogList.Clear();
         enveloppeSendCatalog.Content.ForEach(media => { Utils.CatalogList.Add(media); });
     }
 }

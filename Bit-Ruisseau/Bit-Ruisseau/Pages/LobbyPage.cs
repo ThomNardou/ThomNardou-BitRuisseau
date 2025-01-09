@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -31,32 +32,26 @@ namespace Bit_Ruisseau.Pages
             this.fileDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
-        private void yourFiles_Click(object sender, EventArgs e)
-        {
-            this.fileDataGridView.DataSource = null;
-            this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
-            isLocal = true;
-        }
-
         private void changeviewCatalog_button_Click(object sender, EventArgs e)
         {
-            this.fileDataGridView.DataSource = null;
-            this.fileDataGridView.DataSource = Utils.Utils.CatalogList;
-            isLocal = false;
+            CatalogPage catalogPage = new CatalogPage();
+            catalogPage.Show();
         }
 
         private void fileDataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            Process.Start(new ProcessStartInfo
             {
-                if (!isLocal)
-                {
-                    MediaData selectedMedia = Utils.Utils.CatalogList[e.RowIndex];
-                    MessageUtilis.AskFile(selectedMedia);
-            
-                    Console.WriteLine("File selected : " + Utils.Utils.CatalogList[e.RowIndex].Title);
-                }
-            }
+                FileName =
+                    $"C:\\Users\\{Environment.UserName}\\Bit-Ruisseau\\Musics\\{Utils.Utils.LocalMusicList[e.RowIndex].Title}{Utils.Utils.LocalMusicList[e.RowIndex].Type}",
+                UseShellExecute = true
+            });
+        }
+
+        private void refreshfilesButton_Click(object sender, EventArgs e)
+        {
+            this.fileDataGridView.DataSource = null;
+            this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
         }
     }
 }
