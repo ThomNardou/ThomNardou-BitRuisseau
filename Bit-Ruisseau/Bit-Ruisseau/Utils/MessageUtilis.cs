@@ -2,6 +2,7 @@
 using Bit_Ruisseau.Classes;
 using Bit_Ruisseau.Classes.Enveloppes;
 using Bit_Ruisseau.Enums;
+using Bit_Ruisseau.Pages;
 using MQTTnet;
 
 namespace Bit_Ruisseau.Utils;
@@ -14,7 +15,7 @@ public class MessageUtilis
     /// </summary>
     /// <param name="_envelope"> Enveloppe générique </param>
     /// <param name="_mqttClient"> Client MQTT </param>
-    public static void OnMessageReceived(GenericEnvelope _envelope, IMqttClient _mqttClient)
+    public static void OnMessageReceived(GenericEnvelope _envelope, IMqttClient _mqttClient, Form form = null)
     {
         Console.WriteLine("Message received: " + _envelope.MessageType);
         switch (_envelope.MessageType)
@@ -26,6 +27,16 @@ public class MessageUtilis
 
             case MessageType.ENVOIE_CATALOGUE:
                 CatalogUtils.OnCatalogReceived(_envelope);
+
+                // if (form != null)
+                // {
+                //     if (form is CatalogPage)
+                //     {
+                //         // form.
+                //         
+                //     }
+                // }
+                
                 break;
 
             case MessageType.DEMANDE_FICHIER:

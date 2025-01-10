@@ -33,6 +33,7 @@ partial class CatalogPage
     {
         dataGridView1 = new System.Windows.Forms.DataGridView();
         label1 = new System.Windows.Forms.Label();
+        refreshButton = new System.Windows.Forms.Button();
         ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
         SuspendLayout();
         // 
@@ -42,7 +43,7 @@ partial class CatalogPage
         dataGridView1.Name = "dataGridView1";
         dataGridView1.Size = new System.Drawing.Size(807, 638);
         dataGridView1.TabIndex = 0;
-        dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+        dataGridView1.CellClick += dataGridView1_CellContentClick;
         // 
         // label1
         // 
@@ -53,17 +54,30 @@ partial class CatalogPage
         label1.TabIndex = 1;
         label1.Text = "Musiques Disponibles";
         // 
+        // refreshButton
+        // 
+        refreshButton.Location = new System.Drawing.Point(41, 121);
+        refreshButton.Name = "refreshButton";
+        refreshButton.Size = new System.Drawing.Size(162, 63);
+        refreshButton.TabIndex = 2;
+        refreshButton.Text = "button1";
+        refreshButton.UseVisualStyleBackColor = true;
+        refreshButton.Click += refreshButton_Click;
+        // 
         // CatalogPage
         // 
         AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
         AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
         ClientSize = new System.Drawing.Size(1066, 662);
+        Controls.Add(refreshButton);
         Controls.Add(label1);
         Controls.Add(dataGridView1);
         Text = "CatalogPage";
         ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
         ResumeLayout(false);
     }
+
+    private System.Windows.Forms.Button refreshButton;
 
     private System.Windows.Forms.Label label1;
 

@@ -34,4 +34,16 @@ public partial class CatalogPage : Form
             }
         }
     }
+
+    private void refreshButton_Click(object sender, EventArgs e)
+    {
+        Utils.MessageUtilis.AskCatalog();
+        Thread.Sleep(5000);
+        this.dataGridView1.DataSource = null;
+        this.dataGridView1.Rows.Clear();
+        this.dataGridView1.ColumnCount = 5;
+        Utils.Utils.CatalogList.ForEach(media => { this.dataGridView1.Rows.Add(media.Title, media.Artist, media.Type, media.Size, media.Duration); });
+        this.dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        this.dataGridView1.Refresh();
+    }
 }

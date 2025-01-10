@@ -55,7 +55,7 @@ namespace Bit_Ruisseau.Utils
         /// </returns>
         public static string GetGeneralTopic()
         {
-            return "global";
+            return "demoAlois";
         }
 
         /// <summary>

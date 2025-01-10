@@ -63,7 +63,9 @@ namespace Bit_Ruisseau.Pages
         {
             Utils.FilesUtils.GetLocalFiles();
             this.fileDataGridView.DataSource = null;
-            this.fileDataGridView.DataSource = Utils.Utils.LocalMusicList;
+            this.fileDataGridView.Rows.Clear();
+            this.fileDataGridView.ColumnCount = 5;
+            Utils.Utils.LocalMusicList.ForEach(media => { this.fileDataGridView.Rows.Add(media.Title, media.Artist, media.Type, media.Size, media.Duration); });
         }
     }
 }
